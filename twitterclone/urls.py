@@ -5,4 +5,5 @@ from twitterclone.tweets import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.tweetlist, name='tweetlist'),
+    path('tweetform/', views.tweetform, name='tweetform'),
 ]

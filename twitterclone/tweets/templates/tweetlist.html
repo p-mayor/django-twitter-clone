@@ -4,7 +4,8 @@
     <ul>
     {% for tweet in latest_tweet_list %}
         <li>
-                {{ tweet.body }}
+                {{ tweet.body }} 
+                - tweeted on {{tweet.time}}
         </li>
     {% endfor %}
     </ul>

@@ -1,0 +1,7 @@
+<h1>Add a tweet!</h1>
+<form action="/tweetform/" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <br>
+    <input type='submit' value="Submit">
+</form>
