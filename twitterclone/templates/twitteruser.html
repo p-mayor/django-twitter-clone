@@ -1,0 +1,8 @@
+<h1>{{ twitteruser.name }}</h1>
+<p>{{ twitteruser.bio }}</p>
+<h4>Tweets:</h4>
+<ul>
+    {% for tweet in twitteruser_tweet_list %}
+        <li><a href="{% url 'detail' tweet.id %}">{{ tweet.body }}</a></li>
+    {% endfor %}
+</ul>
