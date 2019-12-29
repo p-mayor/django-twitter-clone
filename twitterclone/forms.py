@@ -4,5 +4,5 @@ from twitterclone.tweets.models import Tweet
 class TweetForm(forms.ModelForm):
     class Meta:
         model = Tweet
-        fields = ['twitter_user','body']
+        fields = ['body']
         

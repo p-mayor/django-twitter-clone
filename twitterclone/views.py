@@ -16,19 +16,8 @@ def detail(request, tweet_id):
     return render(request, 'detail.html', {'tweet': tweet})
 
 @login_required
-def tweet(request):
-    if request.method == 'POST':
-        form = TweetForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/')
-    else:
-        form = TweetForm()
-    return render(request, 'tweetform.html', {'form':form})
-
-@login_required
 def index(request):
-    latest_tweet_list = Tweet.objects.order_by('time')
+    latest_tweet_list = Tweet.objects.order_by('-time')
     context = {'latest_tweet_list': latest_tweet_list}
     return render(request, 'base.html', context)
 
@@ -36,12 +25,14 @@ def tweetlist(request):
     return render(request, 'tweetlist.html')
 
 @login_required
-def tweetform(request):
+def add_tweet(request):
     if request.method == 'POST':
         form = TweetForm(request.POST)
-        form.fields["twitter_user"].queryset = TwitterUser.objects.filter(user=request.user)
         if form.is_valid():
-            form.save()
+            body = form.cleaned_data.get('body')
+            user = get_object_or_404(TwitterUser, pk=request.user.id)
+            a = Tweet(body=body, twitter_user=user)
+            a.save()
             return HttpResponseRedirect('/')
     else:
         form = TweetForm()

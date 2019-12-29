@@ -1,6 +1,3 @@
-
-{% extends "base.html" %}
-
 {% block tweets %}
 <h1>Tweets:</h1>
 {% if latest_tweet_list %}
@@ -9,9 +6,8 @@
         <li>
             {{ tweet.body }} 
             <br/>
-            - tweeted by {{tweet.twitter_user}} on {{tweet.time}}
+            - tweeted by <a href="{% url 'twitteruser' tweet.twitter_user.user_id %}">{{tweet.twitter_user}}</a> on {{tweet.time}}
             <a href="{% url 'detail' tweet.id %}">detail</a>
-            <a href="{% url 'twitteruser' tweet.twitter_user.user_id %}">author</a>
         </li>
     {% endfor %}
     </ul>

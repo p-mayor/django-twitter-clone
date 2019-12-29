@@ -1,6 +1,7 @@
 <h1>{{request.user}}'s Homepage</h1>
 {% if user.is_authenticated %}
 <p><a href="logout/">logout</a></p>
+<p><a href="tweetform/">tweet</a></p>
 {% else %}
 <p><a href="login/">login</a></p>
 <p><a href="{% url 'signup' %}">signup</a></p>

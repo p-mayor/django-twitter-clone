@@ -9,7 +9,7 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='homepage'),
-    path('tweetform/', views.tweetform, name='tweetform'),
+    path('tweetform/', views.add_tweet, name='add_tweet'),
     path('<int:tweet_id>/', views.detail, name='detail'),
     path('twitteruser/<int:twitteruser_id>/', views.twitteruser, name='twitteruser'),
     path('signup/', views.signup, name='signup'),
