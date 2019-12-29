@@ -1,0 +1,15 @@
+{% block users %}
+<h1>users:</h1>
+{% if twitter_user_list %}
+    <ul>
+    {% for user in twitter_user_list %}
+        <li>
+            
+            <a href="{% url 'follow' user.user_id %}">follow</a> {{ user.name }} 
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No users</p>
+{% endif %}
+{% endblock %}

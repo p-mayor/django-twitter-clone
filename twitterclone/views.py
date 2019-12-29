@@ -20,11 +20,13 @@ def index(request):
     user_data = TwitterUser.objects.filter(user=request.user)
     current_user = TwitterUser.objects.get(user=request.user)
     followers = user_data[0].followers.all()
+    all_users = TwitterUser.objects.all().exclude(user_id=current_user.user_id)
     follower_tweet_list = Tweet.objects.filter(twitter_user=current_user)
     for follower in followers:
+        all_users = all_users.exclude(user_id=follower.user_id)
         follower_tweet_list = follower_tweet_list | Tweet.objects.filter(twitter_user=follower)
     follower_tweet_list = follower_tweet_list.order_by('-time')
-    context = {'follower_tweet_list': follower_tweet_list}
+    context = {'follower_tweet_list': follower_tweet_list, 'twitter_user_list': all_users}
     return render(request, 'base.html', context)
 
 def tweetlist(request):
