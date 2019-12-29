@@ -6,7 +6,7 @@
         <li>
             {{ tweet.body }} 
             <br/>
-            - tweeted by <a href="{% url 'twitteruser' tweet.twitter_user.user_id %}">{{tweet.twitter_user}}</a> on {{tweet.time}}
+            - by <a href="{% url 'twitteruser' tweet.twitter_user.user_id %}">{{tweet.twitter_user}}</a> on {{tweet.time}}
             <a href="{% url 'detail' tweet.id %}">detail</a>
         </li>
     {% endfor %}
