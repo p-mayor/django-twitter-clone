@@ -1,4 +1,4 @@
-{% block users %}
+{% block users_to_follow %}
 <h1>users to follow:</h1>
 {% if twitter_user_list %}
     <ul>
@@ -6,6 +6,19 @@
         <li>
             
             <a href="{% url 'follow' user.user_id %}">follow</a> {{ user.name }} 
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No users</p>
+{% endif %}
+<h1>users you follow:</h1>
+{% if following_list %}
+    <ul>
+    {% for user in following_list %}
+        <li>
+            
+            <a href="{% url 'unfollow' user.user_id %}">unfollow</a> {{ user.name }} 
         </li>
     {% endfor %}
     </ul>

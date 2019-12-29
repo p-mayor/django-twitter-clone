@@ -5,7 +5,8 @@
 <h4>{{ twitteruser.name }}'s Tweets:</h4>
 <ul>
     {% for tweet in twitteruser_tweet_list %}
-        <li><a href="{% url 'detail' tweet.id %}">{{ tweet.body }}</a></li>
+
+        <li>{{ tweet.body }} <br/>- {{tweet.time}} <a href="{% url 'detail' tweet.id %}">detail</a></li>
     {% endfor %}
 </ul>
 <p><a href="{% url 'follow' twitteruser.user_id %}">follow</a></p>

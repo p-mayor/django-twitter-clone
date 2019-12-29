@@ -26,7 +26,7 @@ def index(request):
         all_users = all_users.exclude(user_id=follower.user_id)
         follower_tweet_list = follower_tweet_list | Tweet.objects.filter(twitter_user=follower)
     follower_tweet_list = follower_tweet_list.order_by('-time')
-    context = {'follower_tweet_list': follower_tweet_list, 'twitter_user_list': all_users}
+    context = {'follower_tweet_list': follower_tweet_list, 'twitter_user_list': all_users, 'following_list':followers}
     return render(request, 'base.html', context)
 
 def tweetlist(request):
