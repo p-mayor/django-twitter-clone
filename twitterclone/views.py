@@ -39,7 +39,7 @@ def add_tweet(request):
     return render(request, 'tweetform.html', {'form':form})
 
 
-def twitteruser(request, twitteruser_id):
+def profile(request, twitteruser_id):
     twitteruser = get_object_or_404(TwitterUser, pk=twitteruser_id)
     twitteruser_tweet_list = Tweet.objects.filter(twitter_user=twitteruser_id)
     return render(request, 'twitteruser.html', 
