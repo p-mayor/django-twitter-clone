@@ -4,9 +4,12 @@ from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.models import User
 
 from twitterclone.twitterusers.models import TwitterUser
 from twitterclone.tweets.models import Tweet
+
+from .forms import TweetForm
 
 def detail(request, tweet_id):
     tweet = get_object_or_404(Tweet, pk=tweet_id)
@@ -21,18 +24,16 @@ def tweet(request):
             return HttpResponseRedirect('/')
     else:
         form = TweetForm()
-    return render(request, 'twitterclone/tweets/tweet.html', {'form':form})
+    return render(request, 'tweetform.html', {'form':form})
 
+@login_required
 def index(request):
     latest_tweet_list = Tweet.objects.order_by('time')
     context = {'latest_tweet_list': latest_tweet_list}
     return render(request, 'base.html', context)
 
-
 def tweetlist(request):
-    latest_tweet_list = Tweet.objects.order_by('time')
-    context = {'latest_tweet_list': latest_tweet_list}
-    return render(request, 'tweetlist.html', context)
+    return render(request, 'tweetlist.html')
 
 @login_required
 def tweetform(request):
@@ -48,29 +49,26 @@ def tweetform(request):
 
 
 def twitteruser(request, twitteruser_id):
-    twitter_user = get_object_or_404(TwitterUser, pk=twitteruser_id)
+    twitteruser = get_object_or_404(TwitterUser, pk=twitteruser_id)
     twitteruser_tweet_list = Tweet.objects.filter(twitter_user=twitteruser_id)
     return render(request, 'twitteruser.html', 
         {'twitteruser': twitteruser, 'twitteruser_tweet_list':twitteruser_tweet_list}
     )
 
-# # ref: https://simpleisbetterthancomplex.com/tutorial/2017/02/18/how-to-create-user-sign-up-view.html
+def signup(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
 
-# def signup(request):
-#     if request.method == 'POST':
-#         form = UserCreationForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             username = form.cleaned_data.get('username')
-#             raw_password = form.cleaned_data.get('password1')
-#             user = authenticate(username=username, password=raw_password)
-#             login(request, user)
-#             return HttpResponseRedirect('/')
-#     else:
-#         form = UserCreationForm()
-#     return render(request, 'recipe/signup.html', {'form': form})
-
-
-# def logout_view(request):
-#     logout(request)
-#     return HttpResponseRedirect('/')
+            a = TwitterUser(name=username,bio='', user=user, tweet_count=0, follower_count=0)
+            a.save()
+            
+            login(request, user)
+            return HttpResponseRedirect('/')
+    else:
+        form = UserCreationForm()
+    return render(request, 'signup.html', {'form': form})

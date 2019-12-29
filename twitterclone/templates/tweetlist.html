@@ -7,7 +7,9 @@
     <ul>
     {% for tweet in latest_tweet_list %}
         <li>
-            {{ tweet.body }} - tweeted by {{tweet.twitter_user}} on {{tweet.time}}
+            {{ tweet.body }} 
+            <br/>
+            - tweeted by {{tweet.twitter_user}} on {{tweet.time}}
             <a href="{% url 'detail' tweet.id %}">detail</a>
             <a href="{% url 'twitteruser' tweet.twitter_user.user_id %}">author</a>
         </li>

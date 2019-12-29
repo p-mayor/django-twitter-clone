@@ -12,6 +12,7 @@ urlpatterns = [
     path('tweetform/', views.tweetform, name='tweetform'),
     path('<int:tweet_id>/', views.detail, name='detail'),
     path('twitteruser/<int:twitteruser_id>/', views.twitteruser, name='twitteruser'),
-    path('signup/', custom_auth_views.signup, name='signup'),
-    path('login/', auth_views.LoginView.as_view(template_name='recipe/login.html'),name='login'),
+    path('signup/', views.signup, name='signup'),
+    path('login/', auth_views.LoginView.as_view(template_name='login.html'),name='login'),
+    path('logout/', auth_views.LogoutView.as_view(template_name='login.html'),name='logout'),
 ]
