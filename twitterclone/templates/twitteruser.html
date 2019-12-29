@@ -1,8 +1,12 @@
 <h1>User: {{ twitteruser.name }}</h1>
 <p>Bio: {{ twitteruser.bio }}</p>
+<p>Tweet count: {{ twitteruser_tweet_list.count }}</p>
+<p>Follower count: {{ twitteruser.followers.count }}</p>
 <h4>{{ twitteruser.name }}'s Tweets:</h4>
 <ul>
     {% for tweet in twitteruser_tweet_list %}
         <li><a href="{% url 'detail' tweet.id %}">{{ tweet.body }}</a></li>
     {% endfor %}
 </ul>
+<p><a href="{% url 'follow' twitteruser.user_id %}">follow</a></p>
+<p><a href="{% url 'unfollow' twitteruser.user_id %}">unfollow</a></p>

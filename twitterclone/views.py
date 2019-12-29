@@ -17,8 +17,14 @@ def detail(request, tweet_id):
 
 @login_required
 def index(request):
-    latest_tweet_list = Tweet.objects.order_by('-time')
-    context = {'latest_tweet_list': latest_tweet_list}
+    user_data = TwitterUser.objects.filter(user=request.user)
+    current_user = TwitterUser.objects.get(user=request.user)
+    followers = user_data[0].followers.all()
+    follower_tweet_list = Tweet.objects.filter(twitter_user=current_user)
+    for follower in followers:
+        follower_tweet_list = follower_tweet_list | Tweet.objects.filter(twitter_user=follower)
+    follower_tweet_list = follower_tweet_list.order_by('-time')
+    context = {'follower_tweet_list': follower_tweet_list}
     return render(request, 'base.html', context)
 
 def tweetlist(request):
@@ -63,3 +69,15 @@ def signup(request):
     else:
         form = UserCreationForm()
     return render(request, 'signup.html', {'form': form})
+
+def follow(request, twitteruser_id):
+    current_user = TwitterUser.objects.get(user=request.user)
+    user_to_follow = TwitterUser.objects.get(user=twitteruser_id)
+    current_user.followers.add(user_to_follow)
+    return HttpResponseRedirect('/')
+
+def unfollow(request, twitteruser_id):
+    current_user = TwitterUser.objects.get(user=request.user)
+    user_to_unfollow = TwitterUser.objects.get(user=twitteruser_id)
+    current_user.followers.remove(user_to_unfollow)
+    return HttpResponseRedirect('/')

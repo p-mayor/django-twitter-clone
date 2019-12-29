@@ -8,7 +8,7 @@ class TwitterUser(models.Model):
     name = models.CharField(max_length=20)
     bio = models.TextField("Bio", null=True, blank=True)
     tweet_count = models.IntegerField()
-    follower_count = models.IntegerField()
+    followers = models.ManyToManyField('self', blank=True, symmetrical=False)
 
     def __str__(self):
         return self.name

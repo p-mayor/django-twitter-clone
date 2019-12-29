@@ -1,8 +1,8 @@
 {% block tweets %}
 <h1>Tweets:</h1>
-{% if latest_tweet_list %}
+{% if follower_tweet_list %}
     <ul>
-    {% for tweet in latest_tweet_list %}
+    {% for tweet in follower_tweet_list %}
         <li>
             {{ tweet.body }} 
             <br/>
