@@ -1,11 +1,11 @@
 {% block notifications %}
 <h1>Notifications</h1>
-<p>Notification Count: {{notification_count}}</p>
 {% if notification_list %}
+<p>Notification Count: {{notification_count}}</p>
     <ul>
     {% for notification in notification_list %}
         <li>
-            {{ notification.tweet.body }} 
+            {{ notification.tweet.body }} - by {{notification.tweet.twitter_user}} on {{notification.tweet.time}}
         </li>
     {% endfor %}
     </ul>

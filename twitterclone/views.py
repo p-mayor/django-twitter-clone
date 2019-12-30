@@ -31,14 +31,14 @@ def index(request):
     follower_tweet_list = follower_tweet_list.order_by('-time')
 
     notifications = Notification.objects.filter(tweetfor=current_user)
-    notification_count = notifications.count()
     notification_list = []
-    if notification_count != 0:
+    if notifications.count() != 0:
         for notification in notifications:
             notification_list.append(notification)
 
+    notification_count = len(notification_list)
     Notification.objects.filter(tweetfor=current_user).delete()
-    context = {'follower_tweet_list': follower_tweet_list, 'twitter_user_list': all_users, 'following_list':followers, 'notification_list':notification_list, 'notification_count':notification_count}
+    context = {'follower_tweet_list': follower_tweet_list, 'twitter_user_list': all_users, 'following_list':followers, 'notification_list':notification_list,'notification_count':notification_count}
     return render(request, 'base.html', context)
 
 def tweetlist(request):
