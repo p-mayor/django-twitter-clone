@@ -81,7 +81,7 @@ def signup(request):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
 
-            a = TwitterUser(name=username,bio='', user=user, tweet_count=0, follower_count=0)
+            a = TwitterUser(name=username,bio='', user=user)
             a.save()
             
             login(request, user)
