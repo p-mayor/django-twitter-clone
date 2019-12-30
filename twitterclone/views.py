@@ -6,6 +6,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
 
+from django.views import View
+
 from twitterclone.twitterusers.models import TwitterUser
 from twitterclone.tweets.models import Tweet
 from twitterclone.notifications.models import Notification
@@ -65,12 +67,13 @@ def add_tweet(request):
     return render(request, 'tweetform.html', {'form':form})
 
 
-def profile(request, twitteruser_id):
-    twitteruser = get_object_or_404(TwitterUser, pk=twitteruser_id)
-    twitteruser_tweet_list = Tweet.objects.filter(twitter_user=twitteruser_id)
-    return render(request, 'twitteruser.html', 
-        {'twitteruser': twitteruser, 'twitteruser_tweet_list':twitteruser_tweet_list}
-    )
+class Profile(View):
+    def get(self, request, twitteruser_id):
+        twitteruser = get_object_or_404(TwitterUser, pk=twitteruser_id)
+        twitteruser_tweet_list = Tweet.objects.filter(twitter_user=twitteruser_id)
+        return render(request, 'twitteruser.html', 
+            {'twitteruser': twitteruser, 'twitteruser_tweet_list':twitteruser_tweet_list}
+        )
 
 def signup(request):
     if request.method == 'POST':
