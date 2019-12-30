@@ -1,0 +1,15 @@
+{% block notifications %}
+<h1>Notifications</h1>
+<p>Notification Count: {{notification_count}}</p>
+{% if notification_list %}
+    <ul>
+    {% for notification in notification_list %}
+        <li>
+            {{ notification.tweet.body }} 
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No notifications</p>
+{% endif %}
+{% endblock %}

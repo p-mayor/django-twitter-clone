@@ -7,9 +7,15 @@
 <p><a href="login/">login</a></p>
 <p><a href="{% url 'signup' %}">signup</a></p>
 {% endif %}
+
 {% block tweets %}
     {% include "tweetlist.html" %}
-{% endblock tweets %}
-{% block users_to_follow %}
+{% endblock %}
+
+{% block users %}
     {% include "userlist.html" %}
-{% endblock users_to_follow %}
+{% endblock %}
+
+{% block notifications %}
+    {% include "notification.html" %}
+{% endblock %}

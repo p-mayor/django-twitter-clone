@@ -8,8 +8,11 @@ from django.contrib.auth.models import User
 
 from twitterclone.twitterusers.models import TwitterUser
 from twitterclone.tweets.models import Tweet
+from twitterclone.notifications.models import Notification
 
 from .forms import TweetForm
+
+import re
 
 def detail(request, tweet_id):
     tweet = get_object_or_404(Tweet, pk=tweet_id)
@@ -26,7 +29,15 @@ def index(request):
         all_users = all_users.exclude(user_id=follower.user_id)
         follower_tweet_list = follower_tweet_list | Tweet.objects.filter(twitter_user=follower)
     follower_tweet_list = follower_tweet_list.order_by('-time')
-    context = {'follower_tweet_list': follower_tweet_list, 'twitter_user_list': all_users, 'following_list':followers}
+
+    notifications = Notification.objects.filter(tweetfor=current_user)
+    notification_count = notifications.count()
+    notification_list = []
+    if notification_count != 0:
+        for notification in notifications:
+            notification_list.append(notification)
+
+    context = {'follower_tweet_list': follower_tweet_list, 'twitter_user_list': all_users, 'following_list':followers, 'notification_list':notification_list, 'notification_count':notification_count}
     return render(request, 'base.html', context)
 
 def tweetlist(request):
@@ -39,8 +50,14 @@ def add_tweet(request):
         if form.is_valid():
             body = form.cleaned_data.get('body')
             user = get_object_or_404(TwitterUser, pk=request.user.id)
-            a = Tweet(body=body, twitter_user=user)
-            a.save()
+            new_tweet = Tweet(body=body, twitter_user=user)
+            new_tweet.save()
+            notif_regex = r"@(\w+)"
+            if "@" in body:
+                notified_users = re.findall(notif_regex, body)
+                for notified_user in notified_users:
+                    print('test')
+                    Notification.objects.create(tweet = new_tweet, tweetfor = TwitterUser.objects.get(name=notified_user))
             return HttpResponseRedirect('/')
     else:
         form = TweetForm()
@@ -83,3 +100,15 @@ def unfollow(request, twitteruser_id):
     user_to_unfollow = TwitterUser.objects.get(user=twitteruser_id)
     current_user.followers.remove(user_to_unfollow)
     return HttpResponseRedirect('/')
+
+def notifications(request):
+    current_user = TwitterUser.objects.get(user=request.user)
+   
+    if request.user.is_authenticated:
+        notifications = Notification.objects.filter(tweetfor=current_user)
+        notification_count = notifications.count()
+        if notification_count != 0:
+            for notification in notifications:
+                notification_list.append(notification)
+        Notification.objects.all().delete()
+        return render(request, 'notification.html', {'notification_list':notification_list, 'notification_count':notification_count})
