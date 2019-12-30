@@ -75,8 +75,11 @@ class Profile(View):
             {'twitteruser': twitteruser, 'twitteruser_tweet_list':twitteruser_tweet_list}
         )
 
-def signup(request):
-    if request.method == 'POST':
+class Signup(View):
+    def get(self, request, *args, **kwargs):
+        form = UserCreationForm()
+        return render(request, 'signup.html', {'form': form})
+    def post(self, request, *args, **kwargs):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
@@ -84,14 +87,11 @@ def signup(request):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
 
-            a = TwitterUser(name=username,bio='', user=user, tweet_count=0, follower_count=0)
+            a = TwitterUser(name=username,bio='', user=user)
             a.save()
             
             login(request, user)
             return HttpResponseRedirect('/')
-    else:
-        form = UserCreationForm()
-    return render(request, 'signup.html', {'form': form})
 
 def follow(request, twitteruser_id):
     current_user = TwitterUser.objects.get(user=request.user)
