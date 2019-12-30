@@ -37,6 +37,7 @@ def index(request):
         for notification in notifications:
             notification_list.append(notification)
 
+    Notification.objects.filter(tweetfor=current_user).delete()
     context = {'follower_tweet_list': follower_tweet_list, 'twitter_user_list': all_users, 'following_list':followers, 'notification_list':notification_list, 'notification_count':notification_count}
     return render(request, 'base.html', context)
 
