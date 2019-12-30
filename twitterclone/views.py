@@ -93,17 +93,19 @@ class Signup(View):
             login(request, user)
             return HttpResponseRedirect('/')
 
-def follow(request, twitteruser_id):
-    current_user = TwitterUser.objects.get(user=request.user)
-    user_to_follow = TwitterUser.objects.get(user=twitteruser_id)
-    current_user.followers.add(user_to_follow)
-    return HttpResponseRedirect('/')
+class Follow(View):
+    def get(request, twitteruser_id):
+        current_user = TwitterUser.objects.get(user=request.user)
+        user_to_follow = TwitterUser.objects.get(user=twitteruser_id)
+        current_user.followers.add(user_to_follow)
+        return HttpResponseRedirect('/')
 
-def unfollow(request, twitteruser_id):
-    current_user = TwitterUser.objects.get(user=request.user)
-    user_to_unfollow = TwitterUser.objects.get(user=twitteruser_id)
-    current_user.followers.remove(user_to_unfollow)
-    return HttpResponseRedirect('/')
+class Unfollow(View):
+    def get(request, twitteruser_id):
+        current_user = TwitterUser.objects.get(user=request.user)
+        user_to_unfollow = TwitterUser.objects.get(user=twitteruser_id)
+        current_user.followers.remove(user_to_unfollow)
+        return HttpResponseRedirect('/')
 
 def notifications(request):
     current_user = TwitterUser.objects.get(user=request.user)
